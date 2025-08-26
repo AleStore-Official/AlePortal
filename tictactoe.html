@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic-Tac-Toe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .game-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+      position: relative;
+    }
+
+    .game-container h2 {
+      margin-bottom: 20px;
+      color: #0047AB;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .cell {
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .cell:hover {
+      background-color: #e0e0e0;
+    }
+
+    .winner {
+      margin-top: 20px;
+      color: #FF0000;
+      font-size: 18px;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h2>Tic-Tac-Toe</h2>
+    <div class="board" id="board">
+      <div class="cell" onclick="makeMove(this, 0)"></div>
+      <div class="cell" onclick="makeMove(this, 1)"></div>
+      <div class="cell" onclick="makeMove(this, 2)"></div>
+      <div class="cell" onclick="makeMove(this, 3)"></div>
+      <div class="cell" onclick="makeMove(this, 4)"></div>
+      <div class="cell" onclick="makeMove(this, 5)"></div>
+      <div class="cell" onclick="makeMove(this, 6)"></div>
+      <div class="cell" onclick="makeMove(this, 7)"></div>
+      <div class="cell" onclick="makeMove(this, 8)"></div>
+    </div>
+    <div class="winner" id="winner"></div>
+    <footer>
+      &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    let turn = 'X';
+    let board = ['', '', '', '', '', '', '', '', ''];
+    let winnerElement = document.getElementById('winner');
+    const winConditions = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    let difficulty = 1;
+
+    function makeMove(cell, index) {
+      if (board[index] === '') {
+        board[index] = turn;
+        cell.innerText = turn;
+        if (checkWin(turn)) {
+          winnerElement.innerText = `${turn} wins!`;
+          document.getElementById('board').style.pointerEvents = 'none';
+          setTimeout(resetGame, 5000);
+          if (turn === 'X') difficulty++;
+        } else if (isBoardFull()) {
+          winnerElement.innerText = 'Draw!';
+          document.getElementById('board').style.pointerEvents = 'none';
+          setTimeout(resetGame, 5000);
+        } else {
+          turn = turn === 'X' ? 'O' : 'X';
+          if (turn === 'O') computerMove();
+        }
+      }
+    }
+
+    function computerMove() {
+      let index;
+      if (difficulty === 1) {
+        index = getRandomMove();
+      } else if (difficulty === 2) {
+        index = getBestMove('X') || getRandomMove();
+      } else {
+        index = getBestMove('O') || getBestMove('X') || getRandomMove();
+      }
+      board[index] = 'O';
+      document.querySelectorAll('.cell')[index].innerText = 'O';
+      if (checkWin('O')) {
+        winnerElement.innerText = 'O wins!';
+        document.getElementById('board').style.pointerEvents = 'none';
+        setTimeout(resetGame, 5000);
+      } else if (isBoardFull()) {
+        winnerElement.innerText = 'Draw!';
+        document.getElementById('board').style.pointerEvents = 'none';
+        setTimeout(resetGame, 5000);
+      } else {
+        turn = 'X';
+      }
+    }
+
+    function getRandomMove() {
+      let emptyCells = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+      return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    }
+
+    function getBestMove(player) {
+      for (let condition of winConditions) {
+        let line = condition.map(index => board[index]);
+        if (line.filter(cell => cell === player).length === 2 && line.includes('')) {
+          return condition[line.indexOf('')];
+        }
+      }
+      return null;
+    }
+
+    function checkWin(player) {
+      return winConditions.some(condition => condition.every(index => board[index] === player));
+    }
+
+    function isBoardFull() {
+      return board.every(cell => cell !== '');
+    }
+
+    function resetGame() {
+      board.fill('');
+      document.querySelectorAll('.cell').forEach(cell => cell.innerText = '');
+      winnerElement.innerText = '';
+      document.getElementById('board').style.pointerEvents = 'auto';
+      if (turn === 'O') computerMove();
+    }
+  </script>
+</body>
+</html>

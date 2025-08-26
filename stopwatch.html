@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .stopwatch-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+      position: relative;
+    }
+
+    .stopwatch-container h2 {
+      margin-bottom: 20px;
+      color: #0047AB;
+    }
+
+    .stopwatch-container .time {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .stopwatch-container button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .stopwatch-container button:hover {
+      background-color: #45a049;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+  <script>
+    let timer;
+    let seconds = 0;
+
+    function start() {
+      if (!timer) {
+        timer = setInterval(() => {
+          seconds++;
+          document.getElementById("time").innerText = seconds;
+        }, 1000);
+      }
+    }
+
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    function reset() {
+      clearInterval(timer);
+      timer = null;
+      seconds = 0;
+      document.getElementById("time").innerText = seconds;
+    }
+  </script>
+</head>
+<body>
+  <div class="stopwatch-container">
+    <h2>Stopwatch</h2>
+    <div id="time" class="time">0</div>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    <button onclick="reset()">Reset</button>
+    <footer>
+      &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>

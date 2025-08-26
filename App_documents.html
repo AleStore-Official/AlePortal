@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shared Documents</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .upload-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+      position: relative;
+    }
+
+    .upload-container h2 {
+      margin-bottom: 20px;
+      color: #0047AB;
+    }
+
+    .upload-container label {
+      display: block;
+      margin: 10px 0 5px;
+      color: #333;
+    }
+
+    .upload-container input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 20px;
+    }
+
+    .upload-container input[type="button"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .upload-container input[type="button"]:hover {
+      background-color: #45a049;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .file-list {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    .file-item span {
+      flex: 1;
+    }
+
+    .file-item button {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 5px 10px;
+    }
+
+    .file-item button:hover {
+      background-color: #d32f2f;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-container">
+    <h2>Shared Documents</h2>
+    <label for="file">Choose file:</label>
+    <input type="file" id="file" />
+    <input type="button" onclick="uploadFile()" value="Upload" />
+    <input type="text" id="searchBar" class="search-bar" placeholder="Search files..." onkeyup="searchFiles()">
+    <div class="file-list" id="file-list"></div>
+    <footer>
+      &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    const username = "Guest"; // Utente generico
+
+    function uploadFile() {
+      const fileInput = document.getElementById("file");
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select a file.");
+        return;
+      }
+
+      const usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
+      if (!usersFiles[username]) {
+        usersFiles[username] = [];
+      }
+      usersFiles[username].push(file.name);
+      localStorage.setItem("usersFiles", JSON.stringify(usersFiles));
+
+      alert("File uploaded successfully!");
+      displayFiles();
+    }
+
+    function deleteFile(fileName) {
+      let usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
+      if (usersFiles[username]) {
+        usersFiles[username] = usersFiles[username].filter(file => file !== fileName);
+        localStorage.setItem("usersFiles", JSON.stringify(usersFiles));
+      }
+      displayFiles();
+    }
+
+    function searchFiles() {
+      const query = document.getElementById("searchBar").value.toLowerCase();
+      const fileItems = document.querySelectorAll('.file-item');
+      fileItems.forEach(item => {
+        const fileName = item.querySelector('span').innerText.toLowerCase();
+        item.style.display = fileName.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    function displayFiles() {
+      const fileList = document.getElementById("file-list");
+      fileList.innerHTML = "";
+      const usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
+      const userFiles = usersFiles[username] || [];
+
+      if (userFiles.length === 0) {
+        fileList.innerHTML = "<p>Nessun file caricato.</p>";
+        return;
+      }
+
+      userFiles.forEach(file => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `<span>${file}</span><button onclick="deleteFile('${file}')">Delete</button>`;
+        fileList.appendChild(fileItem);
+      });
+    }
+
+    displayFiles();
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .game-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 400px;
+      position: relative;
+    }
+
+    .game-container h2 {
+      margin-bottom: 10px;
+      color: #0047AB;
+    }
+
+    .game-container p {
+      margin-bottom: 20px;
+      color: #555;
+      font-size: 16px;
+    }
+
+    .game-container button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .game-container button:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+
+    .game-container button img {
+      margin-right: 10px;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      .game-container {
+        width: 90%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h2>Games</h2>
+    <p>Benvenuto! Gioca liberamente senza bisogno di login.</p>
+    <button onclick="location.href='/AlePortal/tictactoe.html'">
+      <img src="/AlePortal/tictactoe.png" alt="Tic-Tac-Toe" width="20" height="20"/> Tic-Tac-Toe
+    </button>
+    <button onclick="location.href='/AlePortal/memory.html'">
+      <img src="/AlePortal/memory.png" alt="Memory" width="20" height="20"/> Memory
+    </button>
+    <footer>
+      &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>

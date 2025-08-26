@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Guest Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .dashboard-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 400px;
+    }
+
+    .dashboard-container h2 {
+      margin-bottom: 20px;
+      color: #0047AB;
+    }
+
+    .dashboard-container button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .dashboard-container button img {
+      margin-right: 10px;
+    }
+
+    .dashboard-container button:hover {
+      background-color: #45a049;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h2>Guest Dashboard</h2>
+    <button onclick="location.href='/AlePortal/App_documents.html'">
+      <img src="/AlePortal/documents.png" alt="Documents" width="20" height="20"/> Documents
+    </button>
+    <button onclick="location.href='/AlePortal/App_games.html'">
+      <img src="/AlePortal/game-controller.png" alt="Games" width="20" height="20"/> Games
+    </button>
+    <button onclick="location.href='/AlePortal/App_utility.html'">
+      <img src="/AlePortal/applications.png" alt="Apps" width="20" height="20"/> Applications
+    </button>
+    <footer>
+      &copy; 2025 AleStore-Official
+    </footer>
+  </div>
+
+  <script src="/AlePortal/config.js"></script>
+  <script>
+    window.onload = function() {
+      checkUserBlock(1); // Assuming current user ID is 1
+    }
+  </script>
+</body>
+</html>

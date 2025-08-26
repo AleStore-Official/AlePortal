@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Useful Applications</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .app-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 400px;
+      position: relative;
+    }
+
+    .app-container h2 {
+      margin-bottom: 10px;
+      color: #0047AB;
+    }
+
+    .app-container p {
+      margin-bottom: 20px;
+      color: #555;
+      font-size: 16px;
+    }
+
+    .app-container button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .app-container button:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+
+    .app-container button img {
+      margin-right: 10px;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      .app-container {
+        width: 90%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h2>Useful Applications</h2>
+    <p>Accesso libero — nessun login richiesto.</p>
+
+    <button onclick="location.href='/AlePortal/calculator.html'">
+      <img src="/AlePortal/calculator.png" alt="Calculator" width="20" height="20"/> Calculator
+    </button>
+
+    <button onclick="location.href='/AlePortal/changer.html'">
+      <img src="/AlePortal/changer.png" alt="Converter" width="20" height="20"/> Converter
+    </button>
+
+    <button onclick="location.href='/AlePortal/stopwatch.html'">
+      <img src="/AlePortal/stopwatch.png" alt="Stopwatch" width="20" height="20"/> Stopwatch
+    </button>
+
+    <button onclick="location.href='/AlePortal/timer.html'">
+      <img src="/AlePortal/timer.png" alt="Timer" width="20" height="20"/> Timer
+    </button>
+
+    <button onclick="location.href='/AlePortal/note.html'">
+      <img src="/AlePortal/note.png" alt="Notes" width="20" height="20"/> Notes
+    </button>
+
+    <button onclick="location.href='/AlePortal/todo.html'">
+      <img src="/AlePortal/todo.png" alt="To-Do List" width="20" height="20"/> To-Do List
+    </button>
+
+    <footer>
+      &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>
