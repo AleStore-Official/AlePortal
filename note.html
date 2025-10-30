@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Notes</title>
+  <meta charset="UTF-8" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -59,24 +60,58 @@
       text-align: center;
     }
   </style>
-  <script>
-    function saveNote() {
-      const note = document.getElementById("note").value;
-      localStorage.setItem("note", note);
-      alert("Note saved!");
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+    const supabase = createClient(
+      'https://hsyyrcbibohwvbuwxwok.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4eHFweWd6dnd0dGp0YWV6ZWdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjAwMDEsImV4cCI6MjA3NjYzNjAwMX0.xPt34HCf7FmooneMFdhAkt2wDSqHFVtYrlJTL9rPAZI'
+    );
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      alert("Accesso richiesto. Effettua il login.");
+      location.href = "alestore-official.github.io/AleLogin/";
     }
 
-    function loadNote() {
-      const note = localStorage.getItem("note");
-      document.getElementById("note").value = note || "";
+    async function saveNote() {
+      const note = document.getElementById("note").value.trim();
+      if (!note) {
+        alert("⚠️ Please write something before saving.");
+        return;
+      }
+
+      await supabase.from("note_utente").insert({
+        user_id: user.id,
+        contenuto: note,
+        dispositivo: navigator.userAgent,
+        data: new Date().toISOString()
+      });
+
+      alert("✅ Nota salvata!");
+    }
+
+    async function loadLastNote() {
+      const { data, error } = await supabase
+        .from("note_utente")
+        .select("contenuto")
+        .eq("user_id", user.id)
+        .order("data", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (data?.contenuto) {
+        document.getElementById("note").value = data.contenuto;
+      }
     }
 
     function clearNote() {
-      localStorage.removeItem("note");
       document.getElementById("note").value = "";
     }
 
-    window.onload = loadNote;
+    window.saveNote = saveNote;
+    window.clearNote = clearNote;
+    window.onload = loadLastNote;
   </script>
 </head>
 <body>
@@ -89,6 +124,6 @@
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
+  <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
 </body>
-<script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
 </html>
