@@ -4,7 +4,6 @@
   <title>To-Do List</title>
   <meta charset="UTF-8" />
   <style>
-    /* Stili identici alla tua versione */
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
@@ -23,15 +22,9 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
       width: 300px;
-      position: relative;
     }
 
-    .todo-container h2 {
-      margin-bottom: 20px;
-      color: #0047AB;
-    }
-
-    .todo-container input[type="text"] {
+    input[type="text"] {
       width: 100%;
       padding: 10px;
       margin: 10px 0 20px;
@@ -39,7 +32,7 @@
       border-radius: 4px;
     }
 
-    .todo-container button {
+    button {
       background-color: #4CAF50;
       color: white;
       padding: 10px 20px;
@@ -49,16 +42,16 @@
       margin: 5px;
     }
 
-    .todo-container button:hover {
+    button:hover {
       background-color: #45a049;
     }
 
-    .todo-container ul {
+    ul {
       list-style-type: none;
       padding: 0;
     }
 
-    .todo-container li {
+    li {
       padding: 10px;
       border-bottom: 1px solid #ccc;
       display: flex;
@@ -66,11 +59,7 @@
       align-items: center;
     }
 
-    .todo-container li span {
-      flex: 1;
-    }
-
-    .todo-container li button {
+    li button {
       background-color: #f44336;
       color: white;
       border: none;
@@ -79,7 +68,7 @@
       padding: 5px 10px;
     }
 
-    .todo-container li button:hover {
+    li button:hover {
       background-color: #d32f2f;
     }
 
@@ -90,68 +79,45 @@
       text-align: center;
     }
   </style>
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-
-    const supabase = createClient(
-      'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4eHFweWd6dnd0dGp0YWV6ZWdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjAwMDEsImV4cCI6MjA3NjYzNjAwMX0.xPt34HCf7FmooneMFdhAkt2wDSqHFVtYrlJTL9rPAZI'
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      alert("Accesso richiesto. Effettua il login.");
-      location.href = "alestore-official.github.io/AleLogin/";
-    }
-
-    const todoList = document.getElementById("todoList");
-
-    async function addItem() {
-      const itemText = document.getElementById("todoInput").value.trim();
-      if (!itemText) {
+  <script>
+    function addItem() {
+      const itemText = document.getElementById("todoInput").value;
+      if (itemText === "") {
         alert("Please enter a task.");
         return;
       }
 
-      await supabase.from("todo_utente").insert({
-        user_id: user.id,
-        testo: itemText,
-        dispositivo: navigator.userAgent,
-        data: new Date().toISOString()
-      });
+      const listItem = document.createElement("li");
+      listItem.innerHTML = `<span>${itemText}</span><button onclick="removeItem(this)">Delete</button>`;
+      document.getElementById("todoList").appendChild(listItem);
 
       document.getElementById("todoInput").value = "";
-      await loadList();
+      saveList();
     }
 
-    async function removeItem(button) {
-      const itemText = button.parentElement.querySelector("span").innerText;
-      await supabase
-        .from("todo_utente")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("testo", itemText);
-
-      await loadList();
+    function removeItem(button) {
+      button.parentElement.remove();
+      saveList();
     }
 
-    async function loadList() {
-      todoList.innerHTML = "";
-      const { data: items } = await supabase
-        .from("todo_utente")
-        .select("testo")
-        .eq("user_id", user.id)
-        .order("data", { ascending: true });
+    function saveList() {
+      const items = [];
+      document.querySelectorAll("#todoList li").forEach(item => {
+        items.push(item.querySelector("span").innerText);
+      });
+      localStorage.setItem("todoList", JSON.stringify(items));
+    }
 
-      items.forEach(({ testo }) => {
+    function loadList() {
+      const items = JSON.parse(localStorage.getItem("todoList")) || [];
+      const todoList = document.getElementById("todoList");
+      items.forEach(itemText => {
         const listItem = document.createElement("li");
-        listItem.innerHTML = `<span>${testo}</span><button onclick="removeItem(this)">Delete</button>`;
+        listItem.innerHTML = `<span>${itemText}</span><button onclick="removeItem(this)">Delete</button>`;
         todoList.appendChild(listItem);
       });
     }
 
-    window.addItem = addItem;
-    window.removeItem = removeItem;
     window.onload = loadList;
   </script>
 </head>
@@ -162,9 +128,8 @@
     <button onclick="addItem()">Add</button>
     <ul id="todoList"></ul>
     <footer>
-      &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
+      &copy; 2025 <strong>AleStore-Official</strong>
     </footer>
   </div>
-  <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
 </body>
 </html>
