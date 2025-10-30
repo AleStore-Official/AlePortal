@@ -2,7 +2,9 @@
 <html>
 <head>
   <title>To-Do List</title>
+  <meta charset="UTF-8" />
   <style>
+    /* Stili identici alla tua versione */
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
@@ -88,45 +90,68 @@
       text-align: center;
     }
   </style>
-  <script>
-    function addItem() {
-      const itemText = document.getElementById("todoInput").value;
-      if (itemText === "") {
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+    const supabase = createClient(
+      'https://hsyyrcbibohwvbuwxwok.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4eHFweWd6dnd0dGp0YWV6ZWdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjAwMDEsImV4cCI6MjA3NjYzNjAwMX0.xPt34HCf7FmooneMFdhAkt2wDSqHFVtYrlJTL9rPAZI'
+    );
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      alert("Accesso richiesto. Effettua il login.");
+      location.href = "alestore-official.github.io/AleLogin/";
+    }
+
+    const todoList = document.getElementById("todoList");
+
+    async function addItem() {
+      const itemText = document.getElementById("todoInput").value.trim();
+      if (!itemText) {
         alert("Please enter a task.");
         return;
       }
 
-      const listItem = document.createElement("li");
-      listItem.innerHTML = `<span>${itemText}</span><button onclick="removeItem(this)">Delete</button>`;
-      document.getElementById("todoList").appendChild(listItem);
+      await supabase.from("todo_utente").insert({
+        user_id: user.id,
+        testo: itemText,
+        dispositivo: navigator.userAgent,
+        data: new Date().toISOString()
+      });
 
       document.getElementById("todoInput").value = "";
-      saveList();
+      await loadList();
     }
 
-    function removeItem(button) {
-      button.parentElement.remove();
-      saveList();
+    async function removeItem(button) {
+      const itemText = button.parentElement.querySelector("span").innerText;
+      await supabase
+        .from("todo_utente")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("testo", itemText);
+
+      await loadList();
     }
 
-    function saveList() {
-      const items = [];
-      document.querySelectorAll("#todoList li").forEach(item => {
-        items.push(item.querySelector("span").innerText);
-      });
-      localStorage.setItem("todoList", JSON.stringify(items));
-    }
+    async function loadList() {
+      todoList.innerHTML = "";
+      const { data: items } = await supabase
+        .from("todo_utente")
+        .select("testo")
+        .eq("user_id", user.id)
+        .order("data", { ascending: true });
 
-    function loadList() {
-      const items = JSON.parse(localStorage.getItem("todoList")) || [];
-      const todoList = document.getElementById("todoList");
-      items.forEach(itemText => {
+      items.forEach(({ testo }) => {
         const listItem = document.createElement("li");
-        listItem.innerHTML = `<span>${itemText}</span><button onclick="removeItem(this)">Delete</button>`;
+        listItem.innerHTML = `<span>${testo}</span><button onclick="removeItem(this)">Delete</button>`;
         todoList.appendChild(listItem);
       });
     }
 
+    window.addItem = addItem;
+    window.removeItem = removeItem;
     window.onload = loadList;
   </script>
 </head>
@@ -140,6 +165,6 @@
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
+  <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
 </body>
-<script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
 </html>
