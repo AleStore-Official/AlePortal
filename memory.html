@@ -2,6 +2,8 @@
 <html>
 <head>
   <title>Memory Game</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,6 +75,11 @@
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
+
+  <script type="module">
+    import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
+    blockIfUnauthorized();
+  </script>
 
   <script>
     let firstCard, secondCard;
