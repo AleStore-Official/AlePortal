@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Guest Dashboard</title>
+  <title>User Dashboard</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E8GTDXF01V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-E8GTDXF01V', {
+      page_title: 'AlePortal Dashboard',
+      page_path: '/AlePortal/dashboard'
+    });
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,6 +24,22 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark {
+      background: #1e1e1e;
+      color: #f0f0f0;
+    }
+
+    #themeToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
 
     .dashboard-container {
@@ -25,9 +51,19 @@
       width: 400px;
     }
 
+    body.dark .dashboard-container {
+      background-color: #2c2c2c;
+      color: #f0f0f0;
+    }
+
     .dashboard-container h2 {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       color: #0047AB;
+    }
+
+    .dashboard-container p {
+      margin-bottom: 20px;
+      font-size: 16px;
     }
 
     .dashboard-container button {
@@ -40,27 +76,32 @@
       margin: 10px;
       display: flex;
       align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .dashboard-container button:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
     }
 
     .dashboard-container button img {
       margin-right: 10px;
     }
 
-    .dashboard-container button:hover {
-      background-color: #45a049;
-    }
-
     footer {
       margin-top: 20px;
       font-size: 14px;
-      color: #333;
       text-align: center;
     }
   </style>
 </head>
 <body>
+  <button id="themeToggle" title="Toggle theme">🌙</button>
+
   <div class="dashboard-container">
-    <h2>Guest Dashboard</h2>
+    <h2>User Dashboard</h2>
+    <p id="welcome">Benvenuto!</p>
     <button onclick="location.href='/AlePortal/App_documents.html'">
       <img src="/AlePortal/documents.png" alt="Documents" width="20" height="20"/> Documents
     </button>
@@ -71,18 +112,56 @@
       <img src="/AlePortal/applications.png" alt="Apps" width="20" height="20"/> Applications
     </button>
     <footer>
-      &copy; 2025 AleStore-Official
+      &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
     blockIfUnauthorized();
+
+    const supabase = createClient(
+      'https://hsyyrcbibohwvbuwxwok.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeXlyY2JpYm9od3ZidXd4d29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjE0MDcsImV4cCI6MjA3NjYzNzQwN30.2KsFsGYjwf_cA7Z9oglVthiaE1_jWYuQ6HMMm5UXsyo'
+    );
+
+    const welcome = document.getElementById("welcome");
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      location.href = "https://alestore-official.github.io/AleLogin";
+    } else {
+      const { data: profile } = await supabase
+        .from("utenti")
+        .select("firstName,lastName")
+        .eq("email", user.email)
+        .single();
+      welcome.textContent = `Benvenuto ${profile?.firstName || ''} ${profile?.lastName || ''}!`;
+    }
   </script>
+
+  <script>
+    const toggle = document.getElementById("themeToggle");
+    const currentTheme = localStorage.getItem("aledashboard-theme");
+    if (currentTheme === "dark") {
+      document.body.classList.add("dark");
+      toggle.textContent = "☀️";
+    }
+
+    toggle.onclick = () => {
+      document.body.classList.toggle("dark");
+      const theme = document.body.classList.contains("dark") ? "dark" : "light";
+      localStorage.setItem("aledashboard-theme", theme);
+      toggle.textContent = theme === "dark" ? "☀️" : "🌙";
+    };
+  </script>
+
   <script src="/AlePortal/config.js"></script>
   <script>
     window.onload = function() {
-      checkUserBlock(1); // Assuming current user ID is 1
+      checkUserBlock(1);
     }
   </script>
   <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
