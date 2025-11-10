@@ -14,6 +14,22 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark {
+      background: #1e1e1e;
+      color: #f0f0f0;
+    }
+
+    #themeToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
 
     .stopwatch-container {
@@ -26,9 +42,19 @@
       position: relative;
     }
 
+    body.dark .stopwatch-container {
+      background-color: #2c2c2c;
+      color: #f0f0f0;
+    }
+
     .stopwatch-container h2 {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       color: #0047AB;
+    }
+
+    .stopwatch-container p {
+      margin-bottom: 20px;
+      font-size: 16px;
     }
 
     .stopwatch-container .time {
@@ -53,7 +79,6 @@
     footer {
       margin-top: 20px;
       font-size: 14px;
-      color: #333;
       text-align: center;
     }
   </style>
@@ -84,8 +109,11 @@
   </script>
 </head>
 <body>
+  <button id="themeToggle" title="Toggle theme">🌙</button>
+
   <div class="stopwatch-container">
     <h2>Stopwatch</h2>
+    <p id="welcome">Benvenuto!</p>
     <div id="time" class="time">0</div>
     <button onclick="start()">Start</button>
     <button onclick="stop()">Stop</button>
@@ -97,7 +125,44 @@
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
     blockIfUnauthorized();
+
+    const supabase = createClient(
+      'https://hsyyrcbibohwvbuwxwok.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeXlyY2JpYm9od3ZidXd4d29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjE0MDcsImV4cCI6MjA3NjYzNzQwN30.2KsFsGYjwf_cA7Z9oglVthiaE1_jWYuQ6HMMm5UXsyo'
+    );
+
+    const welcome = document.getElementById("welcome");
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      location.href = "https://alestore-official.github.io/AleLogin";
+    } else {
+      const { data: profile } = await supabase
+        .from("utenti")
+        .select("firstName,lastName")
+        .eq("email", user.email)
+        .single();
+      welcome.textContent = `Benvenuto ${profile?.firstName || ''} ${profile?.lastName || ''}!`;
+    }
+  </script>
+
+  <script>
+    const toggle = document.getElementById("themeToggle");
+    const currentTheme = localStorage.getItem("alestopwatch-theme");
+    if (currentTheme === "dark") {
+      document.body.classList.add("dark");
+      toggle.textContent = "☀️";
+    }
+
+    toggle.onclick = () => {
+      document.body.classList.toggle("dark");
+      const theme = document.body.classList.contains("dark") ? "dark" : "light";
+      localStorage.setItem("alestopwatch-theme", theme);
+      toggle.textContent = theme === "dark" ? "☀️" : "🌙";
+    };
   </script>
   <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
 </body>
