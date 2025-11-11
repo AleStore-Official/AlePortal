@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>To-Do List</title>
   <meta charset="UTF-8" />
+  <title>To-Do List - AleStore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -47,13 +47,8 @@
     }
 
     .todo-container h2 {
-      margin-bottom: 10px;
-      color: #0047AB;
-    }
-
-    .todo-container p {
       margin-bottom: 20px;
-      font-size: 16px;
+      color: #0047AB;
     }
 
     input[type="text"] {
@@ -157,7 +152,6 @@
 
   <div class="todo-container">
     <h2>To-Do List</h2>
-    <p id="welcome">Benvenuto!</p>
     <input type="text" id="todoInput" placeholder="Add a task..." />
     <button onclick="addItem()">Add</button>
     <ul id="todoList"></ul>
@@ -174,21 +168,12 @@
 
     const supabase = createClient(
       'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeXlyY2JpYm9od3ZidXd4d29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjE0MDcsImV4cCI6MjA3NjYzNzQwN30.2KsFsGYjwf_cA7Z9oglVthiaE1_jWYuQ6HMMm5UXsyo'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
     );
-
-    const welcome = document.getElementById("welcome");
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       location.href = "https://alestore-official.github.io/AleLogin";
-    } else {
-      const { data: profile } = await supabase
-        .from("utenti")
-        .select("firstName,lastName")
-        .eq("email", user.email)
-        .single();
-      welcome.textContent = `Benvenuto ${profile?.firstName || ''} ${profile?.lastName || ''}!`;
     }
   </script>
 
