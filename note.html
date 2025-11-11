@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Notes</title>
   <meta charset="UTF-8" />
+  <title>Notes - AleStore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -100,7 +100,6 @@
 
   <div class="note-container">
     <h2>Notes</h2>
-    <p id="welcome">Benvenuto!</p>
     <textarea id="note" placeholder="Write a note..."></textarea>
     <button onclick="saveNote()">Save</button>
     <button onclick="clearNote()">Clear</button>
@@ -117,21 +116,12 @@
 
     const supabase = createClient(
       'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeXlyY2JpYm9od3ZidXd4d29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjE0MDcsImV4cCI6MjA3NjYzNzQwN30.2KsFsGYjwf_cA7Z9oglVthiaE1_jWYuQ6HMMm5UXsyo'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
     );
-
-    const welcome = document.getElementById("welcome");
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       location.href = "https://alestore-official.github.io/AleLogin";
-    } else {
-      const { data: profile } = await supabase
-        .from("utenti")
-        .select("firstName,lastName")
-        .eq("email", user.email)
-        .single();
-      welcome.textContent = `Benvenuto ${profile?.firstName || ''} ${profile?.lastName || ''}!`;
     }
   </script>
 
