@@ -1,91 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Calculator</title>
   <meta charset="UTF-8" />
+  <title>Calculator - AleStore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      background: linear-gradient(135deg, #d0f0ff, #fbeaff);
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      align-items: center;
+      min-height: 100vh;
       margin: 0;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.4s, color 0.4s;
     }
-
     body.dark {
-      background: #1e1e1e;
-      color: #f0f0f0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #eee;
     }
-
-    #themeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .calc-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .glass-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(16px);
+      max-width: 400px;
+      width: 90%;
       text-align: center;
-      width: 300px;
-      position: relative;
+      animation: fadeInUp 0.8s ease-out;
     }
-
-    body.dark .calc-container {
-      background-color: #2c2c2c;
-      color: #f0f0f0;
-    }
-
-    .calc-container h2 {
-      margin-bottom: 20px;
-      color: #0047AB;
-    }
-
-    .calc-container input[type="text"] {
+    h2 { margin-bottom: 20px; font-weight: 600; }
+    input[type="text"] {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0 20px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.25);
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
       text-align: right;
     }
-
-    .calc-container button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 5px;
-      width: 60px;
+    body.dark input[type="text"] {
+      background: rgba(255,255,255,0.1);
+      color: #eee;
     }
-
-    .calc-container button:hover {
-      background-color: #45a049;
-    }
-
-    .calc-container .row {
+    .row {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      margin: 8px 0;
     }
-
-    footer {
+    .option-btn {
+      flex: 1;
+      margin: 4px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      backdrop-filter: blur(8px);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .option-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.05);
+    }
+    body.dark .option-btn {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+      color: #eee;
+    }
+    .signature {
       margin-top: 20px;
-      font-size: 14px;
-      text-align: center;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      display: inline-block;
+      padding: 6px 12px;
     }
+    body.dark .signature { background: rgba(0,0,0,0.4); }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #themeToggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      cursor: pointer;
+    }
+    body.dark #themeToggle { background: rgba(0,0,0,0.9); color: #fff; }
   </style>
   <script>
     function insert(num) {
@@ -113,36 +128,36 @@
 <body>
   <button id="themeToggle" title="Toggle theme">🌙</button>
 
-  <div class="calc-container">
-    <h2>Calculator</h2>
+  <div class="glass-box">
+    <h2>🧮 Calculator</h2>
     <form name="form">
-      <input type="text" name="textview" />
+      <input type="text" name="textview" readonly />
     </form>
     <div class="row">
-      <button onclick="insert(1)">1</button>
-      <button onclick="insert(2)">2</button>
-      <button onclick="insert(3)">3</button>
-      <button onclick="clean()">C</button>
+      <button class="option-btn" onclick="insert(1)">1</button>
+      <button class="option-btn" onclick="insert(2)">2</button>
+      <button class="option-btn" onclick="insert(3)">3</button>
+      <button class="option-btn" onclick="clean()">C</button>
     </div>
     <div class="row">
-      <button onclick="insert(4)">4</button>
-      <button onclick="insert(5)">5</button>
-      <button onclick="insert(6)">6</button>
-      <button onclick="insert('*')">*</button>
+      <button class="option-btn" onclick="insert(4)">4</button>
+      <button class="option-btn" onclick="insert(5)">5</button>
+      <button class="option-btn" onclick="insert(6)">6</button>
+      <button class="option-btn" onclick="insert('*')">*</button>
     </div>
     <div class="row">
-      <button onclick="insert(7)">7</button>
-      <button onclick="insert(8)">8</button>
-      <button onclick="insert(9)">9</button>
-      <button onclick="insert('/')">/</button>
+      <button class="option-btn" onclick="insert(7)">7</button>
+      <button class="option-btn" onclick="insert(8)">8</button>
+      <button class="option-btn" onclick="insert(9)">9</button>
+      <button class="option-btn" onclick="insert('/')">/</button>
     </div>
     <div class="row">
-      <button onclick="insert('.')">.</button>
-      <button onclick="insert(0)">0</button>
-      <button onclick="equal()">=</button>
-      <button onclick="back()">&larr;</button>
+      <button class="option-btn" onclick="insert('.')">.</button>
+      <button class="option-btn" onclick="insert(0)">0</button>
+      <button class="option-btn" onclick="equal()">=</button>
+      <button class="option-btn" onclick="back()">&larr;</button>
     </div>
-    <footer>
+    <footer class="signature">
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
@@ -154,16 +169,15 @@
 
   <script>
     const toggle = document.getElementById("themeToggle");
-    const currentTheme = localStorage.getItem("alecalc-theme");
+    const currentTheme = localStorage.getItem("alestore-theme");
     if (currentTheme === "dark") {
       document.body.classList.add("dark");
       toggle.textContent = "☀️";
     }
-
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
       const theme = document.body.classList.contains("dark") ? "dark" : "light";
-      localStorage.setItem("alecalc-theme", theme);
+      localStorage.setItem("alestore-theme", theme);
       toggle.textContent = theme === "dark" ? "☀️" : "🌙";
     };
   </script>
