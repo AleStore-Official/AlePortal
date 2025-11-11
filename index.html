@@ -1,117 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>AlePortal</title>
   <meta charset="UTF-8" />
+  <title>AlePortal - Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E8GTDXF01V"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-E8GTDXF01V', {
-      page_title: 'AlePortal',
-      page_path: '/AlePortal'
-    });
-  </script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      background: linear-gradient(135deg, #d0f0ff, #fbeaff);
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      align-items: center;
+      min-height: 100vh;
       margin: 0;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.4s, color 0.4s;
     }
-
     body.dark {
-      background: #1e1e1e;
-      color: #f0f0f0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #eee;
     }
-
-    #themeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .dashboard-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .glass-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(16px);
+      max-width: 500px;
+      width: 90%;
       text-align: center;
-      width: 400px;
+      animation: fadeInUp 0.8s ease-out;
     }
-
-    body.dark .dashboard-container {
-      background-color: #2c2c2c;
-      color: #f0f0f0;
-    }
-
-    .dashboard-container h2 {
-      margin-bottom: 10px;
-      color: #0047AB;
-    }
-
-    .dashboard-container p {
-      margin-bottom: 20px;
+    h2 { margin-bottom: 20px; font-weight: 600; }
+    .option-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      backdrop-filter: blur(8px);
+      padding: 12px 20px;
+      margin: 10px 0;
       font-size: 16px;
-    }
-
-    .dashboard-container button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
+      font-weight: bold;
+      border-radius: 25px;
       cursor: pointer;
-      margin: 10px;
+      transition: background 0.3s ease, transform 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s ease;
+      gap: 8px;
     }
-
-    .dashboard-container button:hover {
-      background-color: #45a049;
+    .option-btn:hover {
+      background: rgba(255,255,255,0.25);
       transform: scale(1.05);
     }
-
-    .dashboard-container button img {
-      margin-right: 10px;
+    body.dark .option-btn {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+      color: #eee;
     }
-
-    footer {
+    .signature {
       margin-top: 20px;
-      font-size: 14px;
-      text-align: center;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      display: inline-block;
+      padding: 6px 12px;
     }
+    body.dark .signature { background: rgba(0,0,0,0.4); }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #themeToggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      cursor: pointer;
+    }
+    body.dark #themeToggle { background: rgba(0,0,0,0.9); color: #fff; }
   </style>
 </head>
 <body>
   <button id="themeToggle" title="Toggle theme">🌙</button>
 
-  <div class="dashboard-container">
+  <div class="glass-box">
     <h2>User Dashboard</h2>
-    <p id="welcome">Benvenuto!</p>
-    <button onclick="location.href='/AlePortal/App_documents.html'">
+    <button onclick="location.href='/AlePortal/App_documents.html'" class="option-btn">
       <img src="/AlePortal/documents.png" alt="Documents" width="20" height="20"/> Documents
     </button>
-    <button onclick="location.href='/AlePortal/App_games.html'">
+    <button onclick="location.href='/AlePortal/App_games.html'" class="option-btn">
       <img src="/AlePortal/game-controller.png" alt="Games" width="20" height="20"/> Games
     </button>
-    <button onclick="location.href='/AlePortal/App_utility.html'">
-      <img src="/AlePortal/applications.png" alt="Apps" width="20" height="20"/> Applications
+    <button onclick="location.href='/AlePortal/App_utility.html'" class="option-btn">
+      <img src="/AlePortal/applications.png" alt="Applications" width="20" height="20"/> Applications
     </button>
-    <footer>
+    <footer class="signature">
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
@@ -124,21 +112,12 @@
 
     const supabase = createClient(
       'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeXlyY2JpYm9od3ZidXd4d29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjE0MDcsImV4cCI6MjA3NjYzNzQwN30.2KsFsGYjwf_cA7Z9oglVthiaE1_jWYuQ6HMMm5UXsyo'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
     );
-
-    const welcome = document.getElementById("welcome");
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       location.href = "https://alestore-official.github.io/AleLogin";
-    } else {
-      const { data: profile } = await supabase
-        .from("utenti")
-        .select("firstName,lastName")
-        .eq("email", user.email)
-        .single();
-      welcome.textContent = `Benvenuto ${profile?.firstName || ''} ${profile?.lastName || ''}!`;
     }
   </script>
 
@@ -149,7 +128,6 @@
       document.body.classList.add("dark");
       toggle.textContent = "☀️";
     }
-
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
       const theme = document.body.classList.contains("dark") ? "dark" : "light";
