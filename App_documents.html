@@ -1,138 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Shared Documents</title>
   <meta charset="UTF-8" />
+  <title>Shared Documents - AleStore</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      background: linear-gradient(135deg, #d0f0ff, #fbeaff);
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      align-items: center;
+      min-height: 100vh;
       margin: 0;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.4s, color 0.4s;
     }
-
     body.dark {
-      background: #1e1e1e;
-      color: #f0f0f0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #eee;
     }
-
-    #themeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .upload-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .glass-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(16px);
+      max-width: 500px;
+      width: 90%;
       text-align: center;
-      width: 300px;
-      position: relative;
+      animation: fadeInUp 0.8s ease-out;
     }
-
-    body.dark .upload-container {
-      background-color: #2c2c2c;
-      color: #f0f0f0;
-    }
-
-    .upload-container h2 {
-      margin-bottom: 20px;
-      color: #0047AB;
-    }
-
-    .upload-container label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-
-    .upload-container input[type="file"] {
+    h2 { margin-bottom: 20px; font-weight: 600; }
+    input[type="file"], input[type="button"], .search-bar {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0 20px;
-    }
-
-    .upload-container input[type="button"] {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
       border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      background: rgba(255,255,255,0.25);
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
     }
-
-    .upload-container input[type="button"]:hover {
-      background-color: #45a049;
-    }
-
-    .search-bar {
-      margin-bottom: 20px;
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .file-list {
-      margin-top: 20px;
-      width: 100%;
-    }
-
+    body.dark input { background: rgba(255,255,255,0.1); color: #eee; }
     .file-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 5px;
+      padding: 8px 12px;
+      margin: 6px 0;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(6px);
     }
-
-    .file-item span {
-      flex: 1;
-    }
-
-    .file-item button {
-      background-color: #f44336;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 5px 10px;
-    }
-
-    .file-item button:hover {
-      background-color: #d32f2f;
-    }
-
-    footer {
+    body.dark .file-item { background: rgba(20,20,20,0.6); }
+    #messageBox { margin-top: 10px; font-weight: bold; }
+    .signature {
       margin-top: 20px;
-      font-size: 14px;
-      text-align: center;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      display: inline-block;
+      padding: 6px 12px;
     }
+    body.dark .signature { background: rgba(0,0,0,0.4); }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #themeToggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      cursor: pointer;
+    }
+    body.dark #themeToggle { background: rgba(0,0,0,0.9); color: #fff; }
   </style>
 </head>
 <body>
   <button id="themeToggle" title="Toggle theme">🌙</button>
 
-  <div class="upload-container">
-    <h2>Shared Documents</h2>
+  <div class="glass-box">
+    <h2>📂 Shared Documents</h2>
     <label for="file">Choose file:</label>
     <input type="file" id="file" />
     <input type="button" onclick="uploadFile()" value="Upload" />
     <input type="text" id="searchBar" class="search-bar" placeholder="Search files..." onkeyup="searchFiles()">
+    <div id="messageBox"></div>
     <div class="file-list" id="file-list"></div>
-    <footer>
+    <footer class="signature">
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
@@ -145,52 +106,46 @@
 
     const supabase = createClient(
       'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzeXlyY2JpYm9od3ZidXd4d29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNjE0MDcsImV4cCI6MjA3NjYzNzQwN30.2KsFsGYjwf_cA7Z9oglVthiaE1_jWYuQ6HMMm5UXsyo'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
     );
 
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      location.href = "https://alestore-official.github.io/AleLogin";
-    }
-
-    const username = user.email;
-    window.username = username;
+    if (!user) location.href = "https://alestore-official.github.io/AleLogin";
+    window.username = user.email;
     displayFiles();
   </script>
 
   <script>
-    function uploadFile() {
-      const fileInput = document.getElementById("file");
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please select a file.");
-        return;
-      }
+    function showMessage(text, type="info") {
+      const box = document.getElementById("messageBox");
+      box.textContent = text;
+      box.style.color = type==="error" ? "red" : type==="success" ? "green" : "#333";
+    }
 
+    function uploadFile() {
+      const file = document.getElementById("file").files[0];
+      if (!file) { showMessage("⚠️ Please select a file.","error"); return; }
       const usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
-      if (!usersFiles[username]) {
-        usersFiles[username] = [];
-      }
+      if (!usersFiles[username]) usersFiles[username] = [];
       usersFiles[username].push(file.name);
       localStorage.setItem("usersFiles", JSON.stringify(usersFiles));
-
-      alert("File uploaded successfully!");
+      showMessage("✅ File uploaded successfully!","success");
       displayFiles();
     }
 
     function deleteFile(fileName) {
       let usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
       if (usersFiles[username]) {
-        usersFiles[username] = usersFiles[username].filter(file => file !== fileName);
+        usersFiles[username] = usersFiles[username].filter(f => f !== fileName);
         localStorage.setItem("usersFiles", JSON.stringify(usersFiles));
       }
+      showMessage("🗑️ File deleted.","info");
       displayFiles();
     }
 
     function searchFiles() {
       const query = document.getElementById("searchBar").value.toLowerCase();
-      const fileItems = document.querySelectorAll('.file-item');
-      fileItems.forEach(item => {
+      document.querySelectorAll('.file-item').forEach(item => {
         const fileName = item.querySelector('span').innerText.toLowerCase();
         item.style.display = fileName.includes(query) ? 'flex' : 'none';
       });
@@ -201,12 +156,7 @@
       fileList.innerHTML = "";
       const usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
       const userFiles = usersFiles[window.username] || [];
-
-      if (userFiles.length === 0) {
-        fileList.innerHTML = "<p>Nessun file caricato.</p>";
-        return;
-      }
-
+      if (userFiles.length === 0) { fileList.innerHTML = "<p>No files uploaded.</p>"; return; }
       userFiles.forEach(file => {
         const fileItem = document.createElement('div');
         fileItem.className = 'file-item';
@@ -216,17 +166,13 @@
     }
 
     const toggle = document.getElementById("themeToggle");
-    const currentTheme = localStorage.getItem("aleportal-theme");
-    if (currentTheme === "dark") {
-      document.body.classList.add("dark");
-      toggle.textContent = "☀️";
-    }
-
+    const currentTheme = localStorage.getItem("alestore-theme");
+    if (currentTheme==="dark") { document.body.classList.add("dark"); toggle.textContent="☀️"; }
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
-      const theme = document.body.classList.contains("dark") ? "dark" : "light";
-      localStorage.setItem("aleportal-theme", theme);
-      toggle.textContent = theme === "dark" ? "☀️" : "🌙";
+      const theme = document.body.classList.contains("dark") ? "dark":"light";
+      localStorage.setItem("alestore-theme", theme);
+      toggle.textContent = theme==="dark" ? "☀️":"🌙";
     };
   </script>
   <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
