@@ -16,12 +16,10 @@
       margin: 0;
       transition: background 0.3s ease, color 0.3s ease;
     }
-
     body.dark {
       background: #1e1e1e;
       color: #f0f0f0;
     }
-
     #themeToggle {
       position: fixed;
       top: 20px;
@@ -31,7 +29,6 @@
       border: none;
       cursor: pointer;
     }
-
     .stopwatch-container {
       background-color: white;
       padding: 40px;
@@ -41,22 +38,18 @@
       width: 300px;
       position: relative;
     }
-
     body.dark .stopwatch-container {
       background-color: #2c2c2c;
       color: #f0f0f0;
     }
-
     .stopwatch-container h2 {
       margin-bottom: 20px;
       color: #0047AB;
     }
-
     .stopwatch-container .time {
       font-size: 48px;
       margin-bottom: 20px;
     }
-
     .stopwatch-container button {
       background-color: #4CAF50;
       color: white;
@@ -66,11 +59,9 @@
       cursor: pointer;
       margin: 5px;
     }
-
     .stopwatch-container button:hover {
       background-color: #45a049;
     }
-
     footer {
       margin-top: 20px;
       font-size: 14px;
@@ -80,12 +71,27 @@
   <script>
     let timer;
     let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+
+    function updateDisplay() {
+      document.getElementById("time").innerText =
+        `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    }
 
     function start() {
       if (!timer) {
         timer = setInterval(() => {
           seconds++;
-          document.getElementById("time").innerText = seconds;
+          if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+          }
+          if (minutes === 60) {
+            minutes = 0;
+            hours++;
+          }
+          updateDisplay();
         }, 1000);
       }
     }
@@ -99,7 +105,9 @@
       clearInterval(timer);
       timer = null;
       seconds = 0;
-      document.getElementById("time").innerText = seconds;
+      minutes = 0;
+      hours = 0;
+      updateDisplay();
     }
   </script>
 </head>
@@ -108,7 +116,7 @@
 
   <div class="stopwatch-container">
     <h2>Stopwatch</h2>
-    <div id="time" class="time">0</div>
+    <div id="time" class="time">00:00:00</div>
     <button onclick="start()">Start</button>
     <button onclick="stop()">Stop</button>
     <button onclick="reset()">Reset</button>
@@ -119,19 +127,7 @@
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-
     blockIfUnauthorized();
-
-    const supabase = createClient(
-      'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      location.href = "https://alestore-official.github.io/AleLogin";
-    }
   </script>
 
   <script>
@@ -141,7 +137,6 @@
       document.body.classList.add("dark");
       toggle.textContent = "☀️";
     }
-
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
       const theme = document.body.classList.contains("dark") ? "dark" : "light";
