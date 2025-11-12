@@ -16,12 +16,10 @@
       margin: 0;
       transition: background 0.3s ease, color 0.3s ease;
     }
-
     body.dark {
       background: #1e1e1e;
       color: #f0f0f0;
     }
-
     #themeToggle {
       position: fixed;
       top: 20px;
@@ -31,7 +29,6 @@
       border: none;
       cursor: pointer;
     }
-
     .todo-container {
       background-color: white;
       padding: 40px;
@@ -40,17 +37,14 @@
       text-align: center;
       width: 300px;
     }
-
     body.dark .todo-container {
       background-color: #2c2c2c;
       color: #f0f0f0;
     }
-
     .todo-container h2 {
       margin-bottom: 20px;
       color: #0047AB;
     }
-
     input[type="text"] {
       width: 100%;
       padding: 10px;
@@ -58,7 +52,6 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-
     button {
       background-color: #4CAF50;
       color: white;
@@ -68,16 +61,13 @@
       cursor: pointer;
       margin: 5px;
     }
-
     button:hover {
       background-color: #45a049;
     }
-
     ul {
       list-style-type: none;
       padding: 0;
     }
-
     li {
       padding: 10px;
       border-bottom: 1px solid #ccc;
@@ -85,7 +75,6 @@
       justify-content: space-between;
       align-items: center;
     }
-
     li button {
       background-color: #f44336;
       color: white;
@@ -94,11 +83,13 @@
       cursor: pointer;
       padding: 5px 10px;
     }
-
     li button:hover {
       background-color: #d32f2f;
     }
-
+    li.completed span {
+      text-decoration: line-through;
+      color: gray;
+    }
     footer {
       margin-top: 20px;
       font-size: 14px;
@@ -112,44 +103,47 @@
         alert("Please enter a task.");
         return;
       }
-
       const listItem = document.createElement("li");
-      listItem.innerHTML = `<span>${itemText}</span><button onclick="removeItem(this)">Delete</button>`;
+      listItem.innerHTML = `<span onclick="toggleComplete(this)">${itemText}</span>
+                            <button onclick="removeItem(this)">Delete</button>`;
       document.getElementById("todoList").appendChild(listItem);
-
       document.getElementById("todoInput").value = "";
       saveList();
     }
-
     function removeItem(button) {
       button.parentElement.remove();
       saveList();
     }
-
+    function toggleComplete(span) {
+      span.parentElement.classList.toggle("completed");
+      saveList();
+    }
     function saveList() {
       const items = [];
       document.querySelectorAll("#todoList li").forEach(item => {
-        items.push(item.querySelector("span").innerText);
+        items.push({
+          text: item.querySelector("span").innerText,
+          completed: item.classList.contains("completed")
+        });
       });
       localStorage.setItem("todoList", JSON.stringify(items));
     }
-
     function loadList() {
       const items = JSON.parse(localStorage.getItem("todoList")) || [];
       const todoList = document.getElementById("todoList");
-      items.forEach(itemText => {
+      items.forEach(item => {
         const listItem = document.createElement("li");
-        listItem.innerHTML = `<span>${itemText}</span><button onclick="removeItem(this)">Delete</button>`;
+        if (item.completed) listItem.classList.add("completed");
+        listItem.innerHTML = `<span onclick="toggleComplete(this)">${item.text}</span>
+                              <button onclick="removeItem(this)">Delete</button>`;
         todoList.appendChild(listItem);
       });
     }
-
     window.onload = loadList;
   </script>
 </head>
 <body>
   <button id="themeToggle" title="Toggle theme">🌙</button>
-
   <div class="todo-container">
     <h2>To-Do List</h2>
     <input type="text" id="todoInput" placeholder="Add a task..." />
@@ -159,24 +153,10 @@
       &copy; 2025 <strong>AleStore-Official</strong>
     </footer>
   </div>
-
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-
     blockIfUnauthorized();
-
-    const supabase = createClient(
-      'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      location.href = "https://alestore-official.github.io/AleLogin";
-    }
   </script>
-
   <script>
     const toggle = document.getElementById("themeToggle");
     const currentTheme = localStorage.getItem("aletodo-theme");
@@ -184,7 +164,6 @@
       document.body.classList.add("dark");
       toggle.textContent = "☀️";
     }
-
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
       const theme = document.body.classList.contains("dark") ? "dark" : "light";
