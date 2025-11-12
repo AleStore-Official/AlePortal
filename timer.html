@@ -16,12 +16,10 @@
       margin: 0;
       transition: background 0.3s ease, color 0.3s ease;
     }
-
     body.dark {
       background: #1e1e1e;
       color: #f0f0f0;
     }
-
     #themeToggle {
       position: fixed;
       top: 20px;
@@ -31,7 +29,6 @@
       border: none;
       cursor: pointer;
     }
-
     .timer-container {
       background-color: white;
       padding: 40px;
@@ -41,17 +38,14 @@
       width: 300px;
       position: relative;
     }
-
     body.dark .timer-container {
       background-color: #2c2c2c;
       color: #f0f0f0;
     }
-
     .timer-container h2 {
       margin-bottom: 20px;
       color: #0047AB;
     }
-
     .timer-container input[type="text"] {
       width: 100%;
       padding: 10px;
@@ -60,13 +54,11 @@
       border-radius: 4px;
       text-align: center;
     }
-
     .timer-container .time {
       font-size: 36px;
       margin: 20px 0;
       color: #333;
     }
-
     .timer-container button {
       background-color: #4CAF50;
       color: white;
@@ -76,11 +68,9 @@
       cursor: pointer;
       margin: 5px;
     }
-
     .timer-container button:hover {
       background-color: #45a049;
     }
-
     footer {
       margin-top: 20px;
       font-size: 14px;
@@ -89,11 +79,18 @@
   </style>
   <script>
     let countdown;
+    let totalTime;
+
+    function updateDisplay() {
+      const mins = Math.floor(totalTime / 60);
+      const secs = totalTime % 60;
+      document.getElementById("timerDisplay").innerText = `${mins}:${secs < 10 ? '0' + secs : secs}`;
+    }
 
     function startTimer() {
       const minutes = parseInt(document.getElementById("minutes").value) || 0;
       const seconds = parseInt(document.getElementById("seconds").value) || 0;
-      let totalTime = (minutes * 60) + seconds;
+      totalTime = (minutes * 60) + seconds;
 
       if (totalTime <= 0) {
         alert("Please enter a valid time.");
@@ -101,11 +98,10 @@
       }
 
       clearInterval(countdown);
+      updateDisplay();
       countdown = setInterval(() => {
         totalTime--;
-        const mins = Math.floor(totalTime / 60);
-        const secs = totalTime % 60;
-        document.getElementById("timerDisplay").innerText = `${mins}:${secs < 10 ? '0' + secs : secs}`;
+        updateDisplay();
         if (totalTime <= 0) {
           clearInterval(countdown);
           alert("Time's up!");
@@ -120,9 +116,22 @@
 
     function resetTimer() {
       clearInterval(countdown);
+      totalTime = 0;
       document.getElementById("timerDisplay").innerText = "0:00";
       document.getElementById("minutes").value = "";
       document.getElementById("seconds").value = "";
+    }
+
+    function addMinute() {
+      totalTime += 60;
+      updateDisplay();
+    }
+
+    function subtractMinute() {
+      if (totalTime >= 60) {
+        totalTime -= 60;
+        updateDisplay();
+      }
     }
   </script>
 </head>
@@ -137,6 +146,8 @@
     <button onclick="startTimer()">Start</button>
     <button onclick="stopTimer()">Stop</button>
     <button onclick="resetTimer()">Reset</button>
+    <button onclick="addMinute()">+1 Minute</button>
+    <button onclick="subtractMinute()">-1 Minute</button>
     <footer>
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
@@ -144,19 +155,7 @@
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-
     blockIfUnauthorized();
-
-    const supabase = createClient(
-      'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      location.href = "https://alestore-official.github.io/AleLogin";
-    }
   </script>
 
   <script>
@@ -166,7 +165,6 @@
       document.body.classList.add("dark");
       toggle.textContent = "☀️";
     }
-
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
       const theme = document.body.classList.contains("dark") ? "dark" : "light";
