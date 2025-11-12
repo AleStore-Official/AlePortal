@@ -110,14 +110,17 @@
       document.getElementById("todoInput").value = "";
       saveList();
     }
+
     function removeItem(button) {
       button.parentElement.remove();
       saveList();
     }
+
     function toggleComplete(span) {
       span.parentElement.classList.toggle("completed");
       saveList();
     }
+
     function saveList() {
       const items = [];
       document.querySelectorAll("#todoList li").forEach(item => {
@@ -128,6 +131,7 @@
       });
       localStorage.setItem("todoList", JSON.stringify(items));
     }
+
     function loadList() {
       const items = JSON.parse(localStorage.getItem("todoList")) || [];
       const todoList = document.getElementById("todoList");
@@ -139,6 +143,7 @@
         todoList.appendChild(listItem);
       });
     }
+
     window.onload = loadList;
   </script>
 </head>
@@ -153,10 +158,18 @@
       &copy; 2025 <strong>AleStore-Official</strong>
     </footer>
   </div>
+
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-    blockIfUnauthorized();
+
+    const verified = localStorage.getItem("access_verified") === "true";
+    const registered = localStorage.getItem("user_verified") === "true";
+
+    if (!verified || !registered) {
+      blockIfUnauthorized();
+    }
   </script>
+
   <script>
     const toggle = document.getElementById("themeToggle");
     const currentTheme = localStorage.getItem("aletodo-theme");
