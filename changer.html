@@ -111,6 +111,18 @@
         result = amount / 1000;
       } else if (unitFrom === "kilograms" && unitTo === "grams") {
         result = amount * 1000;
+      } else if (unitFrom === "celsius" && unitTo === "fahrenheit") {
+        result = (amount * 9/5) + 32;
+      } else if (unitFrom === "fahrenheit" && unitTo === "celsius") {
+        result = (amount - 32) * 5/9;
+      } else if (unitFrom === "liters" && unitTo === "milliliters") {
+        result = amount * 1000;
+      } else if (unitFrom === "milliliters" && unitTo === "liters") {
+        result = amount / 1000;
+      } else if (unitFrom === "hours" && unitTo === "minutes") {
+        result = amount * 60;
+      } else if (unitFrom === "minutes" && unitTo === "hours") {
+        result = amount / 60;
       } else {
         result = "Conversion not supported";
       }
@@ -130,12 +142,24 @@
       <option value="kilometers">Kilometers</option>
       <option value="grams">Grams</option>
       <option value="kilograms">Kilograms</option>
+      <option value="celsius">Celsius</option>
+      <option value="fahrenheit">Fahrenheit</option>
+      <option value="liters">Liters</option>
+      <option value="milliliters">Milliliters</option>
+      <option value="hours">Hours</option>
+      <option value="minutes">Minutes</option>
     </select>
     <select id="unitTo">
       <option value="meters">Meters</option>
       <option value="kilometers">Kilometers</option>
       <option value="grams">Grams</option>
       <option value="kilograms">Kilograms</option>
+      <option value="celsius">Celsius</option>
+      <option value="fahrenheit">Fahrenheit</option>
+      <option value="liters">Liters</option>
+      <option value="milliliters">Milliliters</option>
+      <option value="hours">Hours</option>
+      <option value="minutes">Minutes</option>
     </select>
     <button class="option-btn" onclick="convert()">Convert</button>
     <div id="converter-result" class="result"></div>
@@ -151,7 +175,7 @@
 
   <script>
     const toggle = document.getElementById("themeToggle");
-    const currentTheme = localStorage.getItem("aleconverter-theme");
+    const currentTheme = localStorage.getItem("alestore-theme");
     if (currentTheme === "dark") {
       document.body.classList.add("dark");
       toggle.textContent = "☀️";
@@ -159,7 +183,7 @@
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
       const theme = document.body.classList.contains("dark") ? "dark" : "light";
-      localStorage.setItem("aleconverter-theme", theme);
+      localStorage.setItem("alestore-theme", theme);
       toggle.textContent = theme === "dark" ? "☀️" : "🌙";
     };
   </script>
