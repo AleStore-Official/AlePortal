@@ -99,6 +99,18 @@
     <button onclick="location.href='/AlePortal/App_utility.html'" class="option-btn">
       <img src="/AlePortal/applications.png" alt="Applications" width="20" height="20"/> Applications
     </button>
+    <button onclick="location.href='/AlePortal/App_converter.html'" class="option-btn">
+      <img src="/AlePortal/converter.png" alt="Converter" width="20" height="20"/> Converter
+    </button>
+    <button onclick="location.href='/AlePortal/App_calculator.html'" class="option-btn">
+      <img src="/AlePortal/calculator.png" alt="Calculator" width="20" height="20"/> Calculator
+    </button>
+    <button onclick="location.href='/AlePortal/App_notes.html'" class="option-btn">
+      <img src="/AlePortal/notes.png" alt="Notes" width="20" height="20"/> Notes
+    </button>
+    <button onclick="location.href='/AlePortal/App_todo.html'" class="option-btn">
+      <img src="/AlePortal/todo.png" alt="To-Do List" width="20" height="20"/> To-Do List
+    </button>
     <footer class="signature">
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
@@ -106,19 +118,7 @@
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-
     blockIfUnauthorized();
-
-    const supabase = createClient(
-      'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      location.href = "https://alestore-official.github.io/AleLogin";
-    }
   </script>
 
   <script>
