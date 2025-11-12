@@ -16,12 +16,10 @@
       margin: 0;
       transition: background 0.3s ease, color 0.3s ease;
     }
-
     body.dark {
       background: #1e1e1e;
       color: #f0f0f0;
     }
-
     #themeToggle {
       position: fixed;
       top: 20px;
@@ -31,7 +29,6 @@
       border: none;
       cursor: pointer;
     }
-
     .memory-container {
       background-color: white;
       padding: 40px;
@@ -41,23 +38,19 @@
       width: 300px;
       position: relative;
     }
-
     body.dark .memory-container {
       background-color: #2c2c2c;
       color: #f0f0f0;
     }
-
     .memory-container h2 {
       margin-bottom: 20px;
       color: #0047AB;
     }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
-
     .card {
       background-color: #f0f0f0;
       padding: 20px;
@@ -69,17 +62,14 @@
       font-size: 24px;
       transition: background-color 0.3s;
     }
-
     .hidden {
       background-color: #f0f0f0;
       color: #f0f0f0;
     }
-
     .revealed {
       background-color: #87CEEB;
       color: #000;
     }
-
     footer {
       margin-top: 20px;
       font-size: 14px;
@@ -100,19 +90,7 @@
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-
     blockIfUnauthorized();
-
-    const supabase = createClient(
-      'https://hsyyrcbibohwvbuwxwok.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      location.href = "https://alestore-official.github.io/AleLogin";
-    }
   </script>
 
   <script>
@@ -122,7 +100,6 @@
       document.body.classList.add("dark");
       toggle.textContent = "☀️";
     }
-
     toggle.onclick = () => {
       document.body.classList.toggle("dark");
       const theme = document.body.classList.contains("dark") ? "dark" : "light";
@@ -162,10 +139,8 @@
 
     function flipCard(card) {
       if (card.classList.contains('revealed') || card === firstCard) return;
-
       card.classList.remove('hidden');
       card.classList.add('revealed');
-
       if (!firstCard) {
         firstCard = card;
       } else {
@@ -191,7 +166,7 @@
     }
 
     function nextLevel() {
-      pairs = pairs.concat(['E', 'F', 'G', 'H']);
+      pairs = pairs.concat(['E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']);
       pairsToAdd = pairs.length * 2;
       gridElement.innerHTML = '';
       initializeGame();
