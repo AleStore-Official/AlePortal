@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <title>AlePortal - Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
   <style>
     body {
       background: linear-gradient(135deg, #d0f0ff, #fbeaff);
@@ -98,7 +108,8 @@
     </button>
     <button onclick="location.href='/AlePortal/App_utility.html'" class="option-btn">
       <img src="/AlePortal/applications.png" alt="Applications" width="20" height="20"/> Applications
-
+    </button>
+    <footer>
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
