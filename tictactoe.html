@@ -6,46 +6,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #FFCCCB, #FFDAB9, #98FB98, #87CEEB);
+      background: linear-gradient(135deg, #d0f0ff, #fbeaff);
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      align-items: center;
+      min-height: 100vh;
       margin: 0;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.4s, color 0.4s;
     }
     body.dark {
-      background: #1e1e1e;
-      color: #f0f0f0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #eee;
     }
-    #themeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .game-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .glass-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(16px);
+      max-width: 500px;
+      width: 90%;
       text-align: center;
-      width: 300px;
-      position: relative;
+      animation: fadeInUp 0.8s ease-out;
     }
-    body.dark .game-container {
-      background-color: #2c2c2c;
-      color: #f0f0f0;
-    }
-    .game-container h2 {
-      margin-bottom: 20px;
-      color: #0047AB;
-    }
+    h2 { margin-bottom: 20px; font-weight: 600; }
     .board {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -53,36 +39,52 @@
       margin-bottom: 20px;
     }
     .cell {
-      background-color: #f0f0f0;
+      background: rgba(255,255,255,0.25);
+      border-radius: 10px;
       padding: 20px;
-      border-radius: 4px;
       cursor: pointer;
       font-size: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 0.3s;
+      transition: background 0.3s ease;
     }
-    .cell:hover {
-      background-color: #e0e0e0;
-    }
-    .winner {
+    .cell:hover { background: rgba(255,255,255,0.35); }
+    body.dark .cell { background: rgba(20,20,20,0.6); color: #eee; }
+    .winner { margin-top: 20px; font-size: 18px; font-weight: bold; }
+    footer.signature {
       margin-top: 20px;
-      color: #FF0000;
-      font-size: 18px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      display: inline-block;
+      padding: 6px 12px;
     }
-    footer {
-      margin-top: 20px;
-      font-size: 14px;
-      text-align: center;
+    body.dark footer.signature { background: rgba(0,0,0,0.4); }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+    #themeToggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      cursor: pointer;
+    }
+    body.dark #themeToggle { background: rgba(0,0,0,0.9); color: #fff; }
   </style>
 </head>
 <body>
   <button id="themeToggle" title="Toggle theme">🌙</button>
 
-  <div class="game-container">
-    <h2>Tic-Tac-Toe</h2>
+  <div class="glass-box">
+    <h2>❌ Tic-Tac-Toe ⭕</h2>
     <div class="board" id="board">
       <div class="cell" onclick="makeMove(this, 0)"></div>
       <div class="cell" onclick="makeMove(this, 1)"></div>
@@ -95,119 +97,102 @@
       <div class="cell" onclick="makeMove(this, 8)"></div>
     </div>
     <div class="winner" id="winner"></div>
-    <footer>
+    <footer class="signature">
       &copy; 2025 <strong>AleStore-Official</strong> — All rights reserved.
     </footer>
   </div>
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-
-    const verified = localStorage.getItem("access_verified") === "true";
-    const registered = localStorage.getItem("user_verified") === "true";
-
-    if (!verified || !registered) {
+    if (!(localStorage.getItem("access_verified")==="true" && localStorage.getItem("user_verified")==="true")) {
       blockIfUnauthorized();
     }
   </script>
 
   <script>
     const toggle = document.getElementById("themeToggle");
-    const currentTheme = localStorage.getItem("aletictactoe-theme");
-    if (currentTheme === "dark") {
+    if (localStorage.getItem("aletictactoe-theme")==="dark") {
       document.body.classList.add("dark");
-      toggle.textContent = "☀️";
+      toggle.textContent="☀️";
     }
-    toggle.onclick = () => {
+    toggle.onclick=()=> {
       document.body.classList.toggle("dark");
-      const theme = document.body.classList.contains("dark") ? "dark" : "light";
-      localStorage.setItem("aletictactoe-theme", theme);
-      toggle.textContent = theme === "dark" ? "☀️" : "🌙";
+      const theme=document.body.classList.contains("dark")?"dark":"light";
+      localStorage.setItem("aletictactoe-theme",theme);
+      toggle.textContent=theme==="dark"?"☀️":"🌙";
     };
 
-    let turn = 'X';
-    let board = ['', '', '', '', '', '', '', '', ''];
-    let winnerElement = document.getElementById('winner');
-    const winConditions = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
-    ];
-    let difficulty = 1;
+    let turn='X';
+    let board=['','','','','','','','',''];
+    let winnerElement=document.getElementById('winner');
+    const winConditions=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    let difficulty=1;
 
-    function makeMove(cell, index) {
-      if (board[index] === '') {
-        board[index] = turn;
-        cell.innerText = turn;
-        if (checkWin(turn)) {
-          winnerElement.innerText = `${turn} wins!`;
-          document.getElementById('board').style.pointerEvents = 'none';
-          setTimeout(resetGame, 5000);
-          if (turn === 'X') difficulty++;
-        } else if (isBoardFull()) {
-          winnerElement.innerText = 'Draw!';
-          document.getElementById('board').style.pointerEvents = 'none';
-          setTimeout(resetGame, 5000);
+    function makeMove(cell,index){
+      if(board[index]===''){
+        board[index]=turn;
+        cell.innerText=turn;
+        if(checkWin(turn)){
+          winnerElement.innerText=`${turn} wins!`;
+          document.getElementById('board').style.pointerEvents='none';
+          setTimeout(resetGame,5000);
+          if(turn==='X') difficulty++;
+        } else if(isBoardFull()){
+          winnerElement.innerText='Draw!';
+          document.getElementById('board').style.pointerEvents='none';
+          setTimeout(resetGame,5000);
         } else {
-          turn = turn === 'X' ? 'O' : 'X';
-          if (turn === 'O') computerMove();
+          turn=turn==='X'?'O':'X';
+          if(turn==='O') computerMove();
         }
       }
     }
 
-    function computerMove() {
+    function computerMove(){
       let index;
-      if (difficulty === 1) {
-        index = getRandomMove();
-      } else if (difficulty === 2) {
-        index = getBestMove('X') || getRandomMove();
-      } else {
-        index = getBestMove('O') || getBestMove('X') || getRandomMove();
-      }
-      board[index] = 'O';
-      document.querySelectorAll('.cell')[index].innerText = 'O';
-      if (checkWin('O')) {
-        winnerElement.innerText = 'O wins!';
-        document.getElementById('board').style.pointerEvents = 'none';
-        setTimeout(resetGame, 5000);
-      } else if (isBoardFull()) {
-        winnerElement.innerText = 'Draw!';
-        document.getElementById('board').style.pointerEvents = 'none';
-        setTimeout(resetGame, 5000);
-      } else {
-        turn = 'X';
-      }
+      if(difficulty===1){ index=getRandomMove(); }
+      else if(difficulty===2){ index=getBestMove('X')||getRandomMove(); }
+      else { index=getBestMove('O')||getBestMove('X')||getRandomMove(); }
+      board[index]='O';
+      document.querySelectorAll('.cell')[index].innerText='O';
+      if(checkWin('O')){
+        winnerElement.innerText='O wins!';
+        document.getElementById('board').style.pointerEvents='none';
+        setTimeout(resetGame,5000);
+      } else if(isBoardFull()){
+        winnerElement.innerText='Draw!';
+        document.getElementById('board').style.pointerEvents='none';
+        setTimeout(resetGame,5000);
+      } else { turn='X'; }
     }
 
-    function getRandomMove() {
-      let emptyCells = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
-      return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    function getRandomMove(){
+      let emptyCells=board.map((val,idx)=>val===''?idx:null).filter(val=>val!==null);
+      return emptyCells[Math.floor(Math.random()*emptyCells.length)];
     }
 
-    function getBestMove(player) {
-      for (let condition of winConditions) {
-        let line = condition.map(index => board[index]);
-        if (line.filter(cell => cell === player).length === 2 && line.includes('')) {
+    function getBestMove(player){
+      for(let condition of winConditions){
+        let line=condition.map(index=>board[index]);
+        if(line.filter(cell=>cell===player).length===2 && line.includes('')){
           return condition[line.indexOf('')];
         }
       }
       return null;
     }
 
-    function checkWin(player) {
-      return winConditions.some(condition => condition.every(index => board[index] === player));
+    function checkWin(player){
+      return winConditions.some(condition=>condition.every(index=>board[index]===player));
     }
 
-    function isBoardFull() {
-      return board.every(cell => cell !== '');
-    }
+    function isBoardFull(){ return board.every(cell=>cell!==''); }
 
-    function resetGame() {
-      board = ['', '', '', '', '', '', '', '', ''];
-      document.querySelectorAll('.cell').forEach(cell => cell.innerText = '');
-      winnerElement.innerText = '';
-      document.getElementById('board').style.pointerEvents = 'auto';
-      turn = 'X';
+    function resetGame(){
+      board=['','','','','','','','',''];
+      document.querySelectorAll('.cell').forEach(cell=>cell.innerText='');
+      winnerElement.innerText='';
+      document.getElementById('board').style.pointerEvents='auto';
+      turn='X';
     }
   </script>
   <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
