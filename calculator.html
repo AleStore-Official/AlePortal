@@ -162,15 +162,10 @@
     </footer>
   </div>
 
+  <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
   <script type="module">
-    import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-
-    const verified = localStorage.getItem("access_verified") === "true";
-    const registered = localStorage.getItem("user_verified") === "true";
-
-    if (!verified || !registered) {
-      blockIfUnauthorized();
-    }
+    import { blockIfUnauthorized } from "https://alestore-official.github.io/AleRegister/access.js";
+    blockIfUnauthorized();
   </script>
 
   <script>
@@ -187,6 +182,5 @@
       toggle.textContent = theme === "dark" ? "☀️" : "🌙";
     };
   </script>
-  <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
 </body>
 </html>
