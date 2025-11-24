@@ -104,22 +104,21 @@
 
   <script type="module">
     import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-    if (!(localStorage.getItem("access_verified")==="true" && localStorage.getItem("user_verified")==="true")) {
-      blockIfUnauthorized();
-    }
+    blockIfUnauthorized();
   </script>
 
   <script>
     const toggle = document.getElementById("themeToggle");
-    if (localStorage.getItem("aletictactoe-theme")==="dark") {
+    const currentTheme = localStorage.getItem("alestore-theme");
+    if (currentTheme === "dark") {
       document.body.classList.add("dark");
-      toggle.textContent="☀️";
+      toggle.textContent = "☀️";
     }
-    toggle.onclick=()=> {
+    toggle.onclick = () => {
       document.body.classList.toggle("dark");
-      const theme=document.body.classList.contains("dark")?"dark":"light";
-      localStorage.setItem("aletictactoe-theme",theme);
-      toggle.textContent=theme==="dark"?"☀️":"🌙";
+      const theme = document.body.classList.contains("dark") ? "dark" : "light";
+      localStorage.setItem("alestore-theme", theme);
+      toggle.textContent = theme === "dark" ? "☀️" : "🌙";
     };
 
     let turn='X';
