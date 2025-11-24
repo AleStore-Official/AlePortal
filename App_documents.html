@@ -98,20 +98,6 @@
     </footer>
   </div>
 
-  <script type="module">
-    import { blockIfUnauthorized } from 'https://alestore-official.github.io/AleRegister/access.js';
-
-    const verified = localStorage.getItem("access_verified") === "true";
-    const registered = localStorage.getItem("user_verified") === "true";
-
-    if (!verified || !registered) {
-      blockIfUnauthorized();
-    } else {
-      window.username = localStorage.getItem("alestore-username");
-      displayFiles();
-    }
-  </script>
-
   <script>
     function showMessage(text, type="info") {
       const box = document.getElementById("messageBox");
@@ -123,6 +109,7 @@
       const file = document.getElementById("file").files[0];
       if (!file) { showMessage("⚠️ Please select a file.","error"); return; }
       const usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
+      const username = localStorage.getItem("alestore-username");
       if (!usersFiles[username]) usersFiles[username] = [];
       usersFiles[username].push(file.name);
       localStorage.setItem("usersFiles", JSON.stringify(usersFiles));
@@ -132,6 +119,7 @@
 
     function deleteFile(fileName) {
       let usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
+      const username = localStorage.getItem("alestore-username");
       if (usersFiles[username]) {
         usersFiles[username] = usersFiles[username].filter(f => f !== fileName);
         localStorage.setItem("usersFiles", JSON.stringify(usersFiles));
@@ -152,7 +140,8 @@
       const fileList = document.getElementById("file-list");
       fileList.innerHTML = "";
       const usersFiles = JSON.parse(localStorage.getItem("usersFiles")) || {};
-      const userFiles = usersFiles[window.username] || [];
+      const username = localStorage.getItem("alestore-username");
+      const userFiles = usersFiles[username] || [];
       if (userFiles.length === 0) { fileList.innerHTML = "<p>No files uploaded.</p>"; return; }
       userFiles.forEach(file => {
         const fileItem = document.createElement('div');
@@ -172,6 +161,12 @@
       toggle.textContent = theme==="dark" ? "☀️":"🌙";
     };
   </script>
+
   <script src="https://alestore-official.github.io/AleCAPTCHA/control.js"></script>
+  <script type="module">
+    import { blockIfUnauthorized } from "https://alestore-official.github.io/AleRegister/access.js";
+    blockIfUnauthorized();
+    displayFiles();
+  </script>
 </body>
 </html>
